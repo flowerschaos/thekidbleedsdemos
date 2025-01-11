@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://mt3uiy834sh1"]
 
-[ext_resource type="Texture2D" uid="uid://c6vkcyvh4y830" path="res://Sprites/unit_shadow.svg" id="1_5foaq"]
-[ext_resource type="Script" path="res://Scripts/unit.gd" id="1_avdxk"]
+[ext_resource type="Script" path="res://Scripts/unit.gd" id="1_am4cx"]
+[ext_resource type="Texture2D" path="res://Sprites/unit_shadow.svg" id="2_qhh5m"]
 
 [sub_resource type="Animation" id="Animation_15ubw"]
 length = 0.001
@@ -58,7 +58,7 @@ _data = {
 }
 
 [node name="Unit" type="Path2D"]
-script = ExtResource("1_avdxk")
+script = ExtResource("1_am4cx")
 
 [node name="PathFollow2D" type="PathFollow2D" parent="."]
 rotates = false
@@ -71,7 +71,7 @@ offset = Vector2(12, -150)
 
 [node name="Shadow" type="Sprite2D" parent="PathFollow2D"]
 modulate = Color(0.222656, 0.222656, 0.222656, 1)
-texture = ExtResource("1_5foaq")
+texture = ExtResource("2_qhh5m")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

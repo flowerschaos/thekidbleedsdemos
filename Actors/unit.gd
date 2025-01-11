@@ -59,7 +59,6 @@ var _is_walking := false :
 @onready var _anim_player: AnimationPlayer = $AnimationPlayer
 @onready var _path_follow: PathFollow2D = $PathFollow2D
 
-	
 signal walk_finished
 
 func _ready() -> void:

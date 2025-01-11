@@ -3,27 +3,13 @@
 [ext_resource type="PackedScene" uid="uid://mt3uiy834sh1" path="res://Scenes/playerunit.tscn" id="2_g7by0"]
 [ext_resource type="Texture2D" uid="uid://cwvvngo65g3ck" path="res://Sprites/red team sprite.png" id="3_t2olq"]
 [ext_resource type="PackedScene" uid="uid://brjn2vnf2agvm" path="res://Scenes/cursor.tscn" id="4_0imms"]
-
-[sub_resource type="GDScript" id="GDScript_ledf3"]
-script/source = "extends Node2D
-
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	print(\"Hello, World\")
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-"
+[ext_resource type="Resource" uid="uid://cu0mdd1hi1lcl" path="res://Scripts/grid.tres" id="4_4jc1s"]
 
 [sub_resource type="TileSet" id="TileSet_ft6fc"]
 tile_layout = 1
 tile_size = Vector2i(80, 80)
 
 [node name="Main" type="Node2D"]
-script = SubResource("GDScript_ledf3")
 
 [node name="Map" type="TileMapLayer" parent="."]
 tile_set = SubResource("TileSet_ft6fc")
@@ -32,3 +18,4 @@ tile_set = SubResource("TileSet_ft6fc")
 skin = ExtResource("3_t2olq")
 
 [node name="Cursor" parent="." instance=ExtResource("4_0imms")]
+grid = ExtResource("4_4jc1s")

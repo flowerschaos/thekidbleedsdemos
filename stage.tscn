@@ -1,0 +1,21 @@
+[gd_scene load_steps=6 format=3 uid="uid://bbboo2bfh8qgr"]
+
+[ext_resource type="PackedScene" path="res://Scenes/playerunit.tscn" id="1_7hntx"]
+[ext_resource type="Texture2D" path="res://Sprites/red team sprite.png" id="2_715fc"]
+[ext_resource type="PackedScene" path="res://Scenes/cursor.tscn" id="3_vhas0"]
+[ext_resource type="Resource" path="res://Scripts/grid.tres" id="4_lx7xp"]
+
+[sub_resource type="TileSet" id="TileSet_ft6fc"]
+tile_layout = 1
+tile_size = Vector2i(80, 80)
+
+[node name="Main" type="Node2D"]
+
+[node name="Map" type="TileMapLayer" parent="."]
+tile_set = SubResource("TileSet_ft6fc")
+
+[node name="Red Team 1" parent="." instance=ExtResource("1_7hntx")]
+skin = ExtResource("2_715fc")
+
+[node name="Cursor" parent="." instance=ExtResource("3_vhas0")]
+grid = ExtResource("4_lx7xp")

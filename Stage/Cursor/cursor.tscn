@@ -1,16 +1,16 @@
 [gd_scene load_steps=3 format=3 uid="uid://brjn2vnf2agvm"]
 
-[ext_resource type="Script" path="res://Scripts/cursor.gd" id="1_3ruoc"]
-[ext_resource type="Texture2D" uid="uid://c5ybwfrq15c7u" path="res://Sprites/cursor.png" id="2_0pajp"]
+[ext_resource type="Script" path="res://Scripts/cursor.gd" id="1_5k6wg"]
+[ext_resource type="Texture2D" path="res://Sprites/cursor.png" id="2_ro66p"]
 
 [node name="Cursor" type="Node2D"]
-script = ExtResource("1_3ruoc")
+script = ExtResource("1_5k6wg")
 
 [node name="Sprite" type="Sprite2D" parent="."]
 position = Vector2(40, 37)
 rotation = 0.762709
 scale = Vector2(0.8, 0.8)
-texture = ExtResource("2_0pajp")
+texture = ExtResource("2_ro66p")
 flip_h = true
 
 [node name="Timer" type="Timer" parent="."]
