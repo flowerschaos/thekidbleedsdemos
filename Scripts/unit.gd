@@ -1,39 +1,107 @@
-extends CharacterBody2D
+# again use of the @ symbol on the decorators
+@tool
+class_name Unit
+extends Path2D
 
-# sets up the statblock for units
-@export_category("Statistics")
-@export var speed_min: int = 1
-@export var speed_max: int = 2
-@export var attack: int = 1
-@export var defense: int = 1
-@export var is_playable: bool
+@export var grid: Resource = preload("res://Scripts/grid.tres")
+@export var move_range := 6
 
-# items, weapons, et cetera
-@export_category("Loadout")
-@export_group("Weapons and Tools")
-@export var primary: String
-@export var secondary_tool: String
-@export var outfit: String
-@export_group("Skills")
-@export var passive: String
-@export var overcharge: String
-@export var overload: String
-@export var last_stand: String
+# setget no longer works in Godot 4
+# there are a couple of new ways to create your getter and setter
+# using a function inside of the set: block triggered an infinite loop
+# so we write the setter code here
+@export var skin: Texture :
+	set(value):
+		skin = value
+		if not _sprite:
+						# yield has been replaced with await
+						# and we await the value on the self object
+			await self.ready
+		_sprite.texture = value
+	get:
+		return _sprite.texture
+		
+@export var skin_offset := Vector2.ZERO :
+	set(value):
+		skin_offset = value
+		if not _sprite:
+			await self.ready
+		_sprite.position = value
+	get:
+		return _sprite.position
 
-var target = null
-var sprite: Sprite2D
+@export var move_speed := 600.0
 
-@onready var health = $Health
+var cell := Vector2.ZERO :
+	set(value):
+		cell = grid.gridclamp(value)
+	get:
+		return cell
+	
+var is_selected := false :
+	set(value):
+		is_selected = value
+		if is_selected:
+			_anim_player.play("selected")
+		else:
+			_anim_player.play("idle")
+	get:
+		return is_selected
+	
+var _is_walking := false :
+	set(value):
+		_is_walking = value
+		set_process(_is_walking)
+	get:
+		return _is_walking
+	
+@onready var _sprite: Sprite2D = $PathFollow2D/Sprite
+@onready var _anim_player: AnimationPlayer = $AnimationPlayer
+@onready var _path_follow: PathFollow2D = $PathFollow2D
 
-func _ready():
-	sprite = $Sprite2D
+	
+signal walk_finished
 
-func damage_unit():
-	if health > 0:
-		health -= 1
-	if health <= 0:
-		queue_free()
-
-func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("target_select"):
-		target = get_global_mouse_position()
+func _ready() -> void:
+	set_process(false)
+	
+	self.cell = grid.calculate_grid_coordinates(position)
+	position = grid.calculate_map_position(cell)
+	
+		# function renamed from .editor_hint
+	if not Engine.is_editor_hint():
+		curve = Curve2D.new()
+		
+	var points := [
+		Vector2(2,2),
+		Vector2(2,5),
+		Vector2(8,5),
+		Vector2(8,7),
+	]
+	walk_along(PackedVector2Array(points))
+		
+func _process(delta: float) -> void:
+		# .offset has been renamed to .progress
+	_path_follow.progress += move_speed * delta
+	
+		# .unit_offset is now .progress_ratio
+	if _path_follow.progress_ratio >= 1.0:
+		self._is_walking = false
+		_path_follow.progress = 0.0
+		position = grid.calculate_map_position(cell)
+		curve.clear_points()
+		emit_signal("walk_finished")
+		
+# PoolVector2Array is now PackedVector2Array
+func walk_along(path: PackedVector2Array) -> void:
+		# there is no path.empty() value
+		# so we use not path.size() instead
+	if not path.size():
+		return
+	
+	curve.add_point(Vector2.ZERO)
+	for point in path:
+		curve.add_point(grid.calculate_map_position(point) - position)
+		
+	cell = path[-1]
+	self._is_walking = true
